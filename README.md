@@ -28,6 +28,13 @@ m = model(
     param=tf.constant(np.ones([2]))
 )
 
+# asserts true
+m = model(
+    x=tf.placeholder(shape=[None, 2], dtype=tf.float32),
+    y=tf.placeholder(shape=[None, 1], dtype=tf.float32),
+    param=tf.constant(np.ones([2]))
+)
+
 # asserts false
 m = model(
     x=tf.constant(np.ones([10, 1])),
