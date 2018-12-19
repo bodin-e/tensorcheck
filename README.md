@@ -3,7 +3,7 @@
 tensorcheck is a (very small) library for validating tensors when using TensorFlow. The library is intended as a
 demonstration of a suggested approach rather than a library in its own right, although contributions or improvement suggestions to the library are welcome.
 The same approach for PyTorch or other frameworks having the tensor as the primary abstraction can be achieved with
- trivial adaption. Authors: Erik Bodin, Andrew Lawrence
+ trivial adaptation. Authors: Erik Bodin, Andrew Lawrence
 
 ## Example
 ```python
