@@ -1,11 +1,12 @@
 
+import collections
 
 MESSAGE_NOT_SAME_NUM_TENSOR_DIMS_AS_DECLARED = \
-    "Tensor '%s' was declared to have %s tensor dim(s) but have %s."
+    "Tensor '%s' was declared to have %s tensor dim(s) but had %s."
 MESSAGE_NOT_SAME_DIM_SIZE_AS_DECLARED_BY = \
     "Tensor '%s' dim %s was of size %s but was expected to be %s as declared by '%s' dim %s"
 MESSAGE_NOT_CORRECT_STATIC_DIM_SIZE = \
-    "Tensor '%s' dim %s was of size %s but was expected to be %s as declared statically"
+    "Tensor '%s' dim %s was of size %s but was expected to be %s as declared directly"
 
 
 def assert_shapes(declarations):
@@ -19,7 +20,7 @@ def assert_shapes(declarations):
     })
     :param declarations: dict with (name, tensor) keys and (size_0, size_1, ...) values.
     size_i:
-        - values of type int are statically checked.
+        - values of type int are checked directly.
         - values of other types act as symbols for lookups against declarations made by other tensors
     """
     # (symbol) => (declaring tensor name, declaring tensor dim, declared value)
@@ -27,13 +28,14 @@ def assert_shapes(declarations):
     for name, tensor in declarations.keys():
         intended_shape_symbols = declarations[(name, tensor)]
         actual_shape = _tensor_shape(tensor)
-        has_same_num_tensor_dim = len(intended_shape_symbols) == len(actual_shape)
+
+        has_same_num_tensor_dim = _num_dim(actual_shape) == _num_dim(intended_shape_symbols)
 
         assert has_same_num_tensor_dim, MESSAGE_NOT_SAME_NUM_TENSOR_DIMS_AS_DECLARED % (
             name, len(intended_shape_symbols), len(actual_shape)
         )
 
-        for i, symbol in enumerate(intended_shape_symbols):
+        for i, symbol in _enumerate_shape(intended_shape_symbols):
             actual_dim_value = actual_shape[i]
 
             if isinstance(symbol, int):
@@ -52,3 +54,17 @@ def assert_shapes(declarations):
 
 def _tensor_shape(tensor):
     return tensor.get_shape().as_list()
+
+
+def _num_dim(shape):
+    if isinstance(shape, collections.Iterable):
+        return len(shape)
+    else:
+        return 1
+
+
+def _enumerate_shape(shape):
+    if isinstance(shape, collections.Iterable):
+        return enumerate(shape)
+    else:
+        return [(0, shape)]
