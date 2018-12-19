@@ -23,6 +23,13 @@ def assert_shapes(declarations):
         - values of type int are checked directly.
         - values of other types act as symbols for lookups against declarations made by other tensors
     """
+    _validate("declarations", declarations, [_check_type(dict)])
+    _validate("declarations' keys", declarations.keys(), [
+        _check_elements(_check_type(collections.Iterable)),
+        _check_elements(_check_length(2)),
+        _check_elements(_check_element_index(1, _check_has_attr("get_shape"))),
+    ])
+
     # (symbol) => (declaring tensor name, declaring tensor dim, declared value)
     shape_declarations = {}
     for name, tensor in declarations.keys():
@@ -50,6 +57,56 @@ def assert_shapes(declarations):
                 )
             else:
                 shape_declarations[symbol] = (name, i, actual_shape[i])
+
+
+def _validate(name, value, checks):
+    for condition, message in checks:
+        if not condition(value):
+            raise ValueError(message(name, value))
+
+
+def _check_elements(check):
+    condition, message = check
+    return (
+        lambda iterable: all(condition(v) for v in iterable),
+        lambda name, iterable: "%s has invalid element:%s" % (
+            name,
+            message("", next(filter(lambda v: not condition(v), enumerate(iterable))))
+        )
+    )
+
+
+def _check_element_index(index, check):
+    condition, message = check
+    return (
+        lambda iterable: condition(iterable[index]),
+        lambda name, iterable: "%s element %s is invalid:%s" % (
+            name,
+            index,
+            message("", next(filter(lambda v: not condition(v), enumerate(iterable))))
+        )
+    )
+
+
+def _check_type(type):
+    return (
+        lambda value: isinstance(value, type),
+        lambda name, value: "%s must be of type %s but is of type %s" % (name, type, type(value))
+    )
+
+
+def _check_length(length):
+    return (
+        lambda value: len(value) == length,
+        lambda name, value: "%s must be of length %s but is of length %s" % (name, length, len(value))
+    )
+
+
+def _check_has_attr(attribute):
+    return (
+        lambda value: hasattr(value, attribute),
+        lambda name, value: "%s does not have attribute '%s'" % (name, attribute)
+    )
 
 
 def _tensor_shape(tensor):
