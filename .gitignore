@@ -1,0 +1,35 @@
+*.so
+**.pyc
+*.swp
+
+tests/.hypothesis
+tests/.pytest_cache
+
+*.DS_Store
+
+# PyCharm Project
+.idea/
+[Bb]in/
+[Ll]ib/
+
+# Python Compilation Files
+__pycache__/
+
+# Python Environment
+[Ee]nvs/
+pyvenv.cfg
+pip-selfcheck.json
+
+# Tensorboard Logs
+[Ll]ogs/
+[Rr]esults/
+
+# Microsoft Office Temp Files
+~*
+
+.ipynb_checkpoints/*
+*.mp4
+
+# Pip
+*.egg-info
+
