@@ -1,7 +1,7 @@
 # tensorcheck
 
 tensorcheck is a (very small) library for validating tensors when using TensorFlow. The library is intended as a
-suggested approach rather than a library in its own right, although contributions or improvement suggestions to the library are welcome.
+demonstration of a suggested approach rather than a library in its own right, although contributions or improvement suggestions to the library are welcome.
 Using the same approach for PyTorch or other frameworks having tensors as the primary abstraction can be achieved with
  trivial adaption.
 
