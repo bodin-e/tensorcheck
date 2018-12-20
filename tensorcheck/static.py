@@ -27,7 +27,7 @@ def assert_shapes(declarations):
     _validate("declarations' keys", declarations.keys(), [
         _check_elements(_check_type(collections.Iterable)),
         _check_elements(_check_length(2)),
-        # _check_elements(_check_element_index(1, _check_has_attr("get_shape"))),
+        _check_elements(_check_element_index(1, _check_or(_check_has_attr("get_shape"), _check_has_attr("size")))),
     ])
 
     # (symbol) => (declaring tensor name, declaring tensor dim, declared value)
@@ -106,6 +106,15 @@ def _check_has_attr(attribute):
     return (
         lambda value: hasattr(value, attribute),
         lambda name, value: "%s does not have attribute '%s'" % (name, attribute)
+    )
+
+
+def _check_or(check_a, check_b):
+    condtion_a, message_a = check_a
+    condtion_b, message_b = check_b
+    return (
+        lambda value: condtion_a(value) or condtion_b(value),
+        lambda name, value: "%s failed with both:'%s and %s" % (name, message_a(name, value),  message_b(name, value))
     )
 
 
