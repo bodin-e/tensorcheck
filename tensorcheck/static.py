@@ -27,7 +27,7 @@ def assert_shapes(declarations):
     _validate("declarations' keys", declarations.keys(), [
         _check_elements(_check_type(collections.Iterable)),
         _check_elements(_check_length(2)),
-        _check_elements(_check_element_index(1, _check_has_attr("get_shape"))),
+        # _check_elements(_check_element_index(1, _check_has_attr("get_shape"))),
     ])
 
     # (symbol) => (declaring tensor name, declaring tensor dim, declared value)
@@ -110,7 +110,12 @@ def _check_has_attr(attribute):
 
 
 def _tensor_shape(tensor):
-    return tensor.get_shape().as_list()
+    if hasattr(tensor, "get_shape"):
+        return tensor.get_shape().as_list()
+    elif hasattr(tensor, "size"):
+        return list(tensor.size())
+    else:
+        raise ValueError("Cannot determine size of tensor of type: %s" % type(tensor))
 
 
 def _num_dim(shape):
