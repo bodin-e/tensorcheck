@@ -6,7 +6,6 @@
 from setuptools import setup
 
 requirements = [
-    'tensorflow>=1.10.0',
     'numpy>=1.10.0',
     'pytest>=3.5.0',
 ]
