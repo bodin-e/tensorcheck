@@ -4,6 +4,8 @@ tensorcheck is a (very small) library for validating tensors when using TensorFl
 demonstration of a suggested approach rather than a library in its own right, although contributions or improvement suggestions to the library are welcome.
 Authors: Erik Bodin, Andrew Lawrence
 
+(Update). Now contributed to TensorFlow, see: https://www.tensorflow.org/api_docs/python/tf/debugging/assert_shapes
+
 ## Example
 ```python
 
@@ -11,7 +13,6 @@ import tensorflow as tf
 import torch
 import numpy as np
 from tensorcheck.static import assert_shapes
-
 
 def model(x, y, param, other_param):
     assert_shapes({
